@@ -1,0 +1,18 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>課程評價系統</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container text-center mt-5">
+        <h1>歡迎來到課程評價系統</h1>
+        <p>請選擇下方功能：</p>
+        <a href="{% url 'evaluation_form' %}" class="btn btn-primary">提交評價</a>
+        <a href="{% url 'evaluation_list' %}" class="btn btn-success">查看評價</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>評價列表</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="{% url 'home' %}">大學牲了沒</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'home' %}">主頁</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'login' %}">登入</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'register' %}">註冊</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'evaluation_form' %}">提交評價</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'evaluation_list' %}">查看評價</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'course_bot' %}">搶課機器人</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'resume_generator' %}">履歷生成器</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container mt-5">
+        <h2 class="text-center">已提交的課程評價</h2>
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>課程名稱</th>
+                    <th>授課教師</th>
+                    <th>修課學期</th>
+                    <th>上課內容</th>
+                    <th>評分方式</th>
+                    <th>作業情況</th>
+                    <th>其他補充</th>
+                    <th>推薦程度</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for evaluation in evaluations %}
+                <tr>
+                    <td>{{ evaluation.course }}</td>
+                    <td>{{ evaluation.instructor }}</td>
+                    <td>{{ evaluation.semester }}</td>
+                    <td>{{ evaluation.content }}</td>
+                    <td>{{ evaluation.grading }}</td>
+                    <td>{{ evaluation.assignments }}</td>
+                    <td>{{ evaluation.additional }}</td>
+                    <td>{{ evaluation.recommendation }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="8" class="text-center">目前沒有任何評價</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

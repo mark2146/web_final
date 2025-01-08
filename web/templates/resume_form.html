@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>履歷生成器</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-5">
+    <h1 class="text-center">履歷生成器</h1>
+    <form method="post" action="{% url 'resume_generator' %}">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="name">姓名</label>
+            <input type="text" class="form-control" id="name" name="name" placeholder="輸入您的姓名" required>
+        </div>
+        <div class="form-group">
+            <label for="email">電子郵件</label>
+            <input type="email" class="form-control" id="email" name="email" placeholder="輸入您的電子郵件" required>
+        </div>
+        <div class="form-group">
+            <label for="phone">聯繫電話</label>
+            <input type="text" class="form-control" id="phone" name="phone" placeholder="輸入您的聯繫電話" required>
+        </div>
+        <div class="form-group">
+            <label for="education">教育背景</label>
+            <textarea class="form-control" id="education" name="education" rows="3" placeholder="如：學校名稱、專業、畢業年份"></textarea>
+        </div>
+        <div class="form-group">
+            <label for="experience">工作經歷</label>
+            <textarea class="form-control" id="experience" name="experience" rows="3" placeholder="如：公司名稱、職位、工作描述"></textarea>
+        </div>
+        <div class="form-group">
+            <label for="skills">技能</label>
+            <textarea class="form-control" id="skills" name="skills" rows="2" placeholder="如：Python, Django, HTML, CSS"></textarea>
+        </div>
+        <div class="form-group">
+            <label for="about">自我介紹</label>
+            <textarea class="form-control" id="about" name="about" rows="3" placeholder="簡單介紹您自己"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">生成履歷</button>
+    </form>
+</div>
+</body>
+</html>

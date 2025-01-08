@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>履歷預覽與調整</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .resume {
+            padding: 20px;
+            border: 1px solid #ccc;
+            margin-top: 20px;
+        }
+
+        /* 添加選中元素的樣式 */
+        .selected {
+            outline: 2px dashed #007bff;
+        }
+    </style>
+</head>
+<body>
+<div class="container mt-5">
+    <h1 class="text-center">履歷預覽與調整</h1>
+
+    <!-- 樣式調整選項 -->
+    <div class="mt-4">
+        <h3>樣式調整</h3>
+        <div class="form-group">
+            <label for="font-color">字體顏色</label>
+            <input type="color" id="font-color" class="form-control" value="#000000">
+        </div>
+        <div class="form-group">
+            <label for="font-size">字體大小</label>
+            <input type="range" id="font-size" class="form-control-range" min="12" max="36" value="16">
+        </div>
+    </div>
+
+    <!-- 履歷預覽 -->
+    <div id="resume-preview" class="resume">
+        <h2 id="name" class="editable">姓名: {{ name }}</h2>
+        <p id="contact" class="editable">聯繫方式: {{ email }} | {{ phone }}</p>
+        <h3 class="editable">教育背景</h3>
+        <p class="editable">{{ education }}</p>
+        <h3 class="editable">工作經歷</h3>
+        <p class="editable">{{ experience }}</p>
+        <h3 class="editable">技能</h3>
+        <p class="editable">{{ skills }}</p>
+        <h3 class="editable">自我介紹</h3>
+        <p class="editable">{{ about }}</p>
+    </div>
+
+    <!-- 動作按鈕 -->
+    <div class="mt-4 text-center">
+        <a href="{% url 'resume_generator' %}" class="btn btn-secondary">返回修改</a>
+        <a href="{% url 'resume_download' %}" class="btn btn-primary">下載 PDF</a>
+    </div>
+</div>
+
+<!-- JavaScript -->
+<script>
+    let selectedElement = null; // 當前選中的元素
+
+    // 點擊元素以選中
+    document.querySelectorAll('.editable').forEach(element => {
+        element.addEventListener('click', function () {
+            // 移除之前選中的樣式
+            if (selectedElement) {
+                selectedElement.classList.remove('selected');
+            }
+
+            // 設置當前選中的元素
+            selectedElement = this;
+            selectedElement.classList.add('selected');
+        });
+    });
+
+    // 動態更新字體顏色
+    document.getElementById('font-color').addEventListener('input', function () {
+        if (selectedElement) {
+            selectedElement.style.color = this.value;
+        } else {
+            alert('請先點選一個元素！');
+        }
+    });
+
+    // 動態更新字體大小
+    document.getElementById('font-size').addEventListener('input', function () {
+        if (selectedElement) {
+            selectedElement.style.fontSize = this.value + 'px';
+        } else {
+            alert('請先點選一個元素！');
+        }
+    });
+</script>
+</body>
+</html>

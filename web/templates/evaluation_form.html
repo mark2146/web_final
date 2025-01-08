@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>提交課程評價</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- FontAwesome for Star Rating -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .rating {
+            display: flex;
+            justify-content: center;
+            flex-direction: row-reverse;
+        }
+
+        .rating input {
+            display: none;
+        }
+
+        .rating label {
+            font-size: 2rem;
+            color: #ccc;
+            cursor: pointer;
+        }
+
+        .rating input:checked ~ label,
+        .rating input:hover ~ label {
+            color: #f5b301;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="{% url 'home' %}">大學牲了沒</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'home' %}">主頁</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'login' %}">登入</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'register' %}">註冊</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'evaluation_form' %}">提交評價</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'evaluation_list' %}">查看評價</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'course_bot' %}">搶課機器人</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'resume_generator' %}">履歷生成器</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+<div class="container mt-5">
+    <h2 class="text-center">提交課程評價</h2>
+    <form method="get" id="semester-form">
+        <div class="form-group">
+            <label for="semester">選擇學期：</label>
+            <select name="semester" id="semester" class="form-control" onchange="document.getElementById('semester-form').submit()">
+                <option value="113,2" {% if semester == '113,2' %}selected{% endif %}>113,2</option>
+                <option value="113,1" {% if semester == '113,1' %}selected{% endif %}>113,1</option>
+                <option value="112,2" {% if semester == '112,2' %}selected{% endif %}>112,2</option>
+                <option value="112,1" {% if semester == '112,1' %}selected{% endif %}>112,1</option>
+                <option value="111,2" {% if semester == '111,2' %}selected{% endif %}>111,2</option>
+            </select>
+        </div>
+    </form>
+    <form method="post" action="{% url 'evaluation_form' %}">
+        {% csrf_token %}
+        <!-- 課程名稱下拉選單 -->
+        <div class="form-group">
+            <label for="course">課程名稱：</label>
+            <select class="form-control" id="course" name="course" required>
+                <option value="" selected disabled>請選擇課程</option>
+                {% for item in courses_and_teachers %}
+                    <option value="{{ item.course }}">{{ item.course }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="instructor">授課教師：</label>
+            <select class="form-control" id="instructor" name="instructor" required>
+                <option value="" selected disabled>請選擇授課教師</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="semester">修課學期：</label>
+            <input required type="text" class="form-control" id="semester" name="semester" placeholder="例如：113上、1113下">
+        </div>
+        <div class="form-group">
+            <label for="content">上課內容 / 方式 / 規定 / 點名：</label>
+            <textarea required class="form-control" id="content" name="content" rows="3" placeholder="上課方式、規定、點名頻率等"></textarea>
+        </div>
+        <div class="form-group">
+            <label for="grading">評分 / 考試方式：</label>
+            <textarea required class="form-control" id="grading" name="grading" rows="3" placeholder="有無期中考、期末考，分數比例等"></textarea>
+        </div>
+        <div class="form-group">
+            <label for="assignments">報告 / 作業：</label>
+            <textarea required class="form-control" id="assignments" name="assignments" rows="3" placeholder="報告或作業的數量及規模"></textarea>
+        </div>
+        <div class="form-group">
+            <label for="additional">其他補充：</label>
+            <textarea required class="form-control" id="additional" name="additional" rows="3" placeholder="還有其他想補充的嗎？"></textarea>
+        </div>
+        <div class="form-group text-center">
+            <label for="recommendation">推薦程度：</label>
+            <div class="rating" id="rating-container">
+                <input type="radio" name="recommendation" id="star5" value="5">
+                <label for="star5"><i class="fa-solid fa-star"></i></label>
+                <input type="radio" name="recommendation" id="star4" value="4">
+                <label for="star4"><i class="fa-solid fa-star"></i></label>
+                <input type="radio" name="recommendation" id="star3" value="3">
+                <label for="star3"><i class="fa-solid fa-star"></i></label>
+                <input type="radio" name="recommendation" id="star2" value="2">
+                <label for="star2"><i class="fa-solid fa-star"></i></label>
+                <input type="radio" name="recommendation" id="star1" value="1">
+                <label for="star1"><i class="fa-solid fa-star"></i></label>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block" id="submit-button">提交評價</button>
+    </form>
+</div>
+
+<!-- JavaScript 動態更新教師名單 -->
+<script>
+        const courseSelect = document.getElementById("course");
+        const instructorSelect = document.getElementById("instructor");
+    
+        const coursesAndTeachers = [
+            {% for item in courses_and_teachers %}
+                {"course": "{{ item.course }}", "teacher": "{{ item.teacher }}"},
+            {% endfor %}
+        ];
+        
+        // 當選擇課程時，更新教師選單
+        courseSelect.addEventListener("change", function() {
+            const selectedCourse = this.value;
+            instructorSelect.innerHTML = '<option value="" selected disabled>請選擇授課教師</option>';
+    
+            coursesAndTeachers.forEach(item => {
+                if (item.course === selectedCourse) {
+                    const option = document.createElement("option");
+                    option.value = item.teacher;
+                    option.textContent = item.teacher;
+                    instructorSelect.appendChild(option);
+                }
+            });
+        });
+        document.getElementById('submit-button').addEventListener('click', function(event) {
+            const ratingInputs = document.getElementsByName('recommendation');
+            let isSelected = false;
+    
+            // 檢查是否有選中的選項
+            for (let i = 0; i < ratingInputs.length; i++) {
+                if (ratingInputs[i].checked) {
+                    isSelected = true;
+                    break;
+                }
+            }
+    
+            if (!isSelected) {
+                event.preventDefault(); // 阻止表單提交
+                alert('請選擇推薦程度！');
+            }
+        });
+</script>
+</body>
+</html>
