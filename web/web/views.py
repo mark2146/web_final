@@ -17,6 +17,7 @@ from django.db import connection
 from django.contrib import messages
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.hashers import check_password
+import os
 
 def register_view(request):
     if request.method == 'POST':
@@ -193,12 +194,17 @@ def evaluation_list(request):
 
 def fetch_courses_and_teachers(semester):
     print(f"開始爬取 {semester} 學期的課程與教師資料...")
-    service = Service(r"C:\Users\User\Desktop\hh\web\chromedriver.exe")
     options = Options()
     options.add_argument("--headless")
     options.add_argument("--disable-gpu")
+    options.add_argument("--no-sandbox")
 
-    driver = webdriver.Chrome(service=service, options=options)
+    driver_path = os.getenv("CHROMEDRIVER_PATH", "").strip()
+    driver = (
+        webdriver.Chrome(service=Service(driver_path), options=options)
+        if driver_path
+        else webdriver.Chrome(options=options)
+    )
     courses_and_teachers = []
 
     try:
@@ -248,5 +254,3 @@ def fetch_courses_and_teachers(semester):
         print(f"爬取過程中發生錯誤: {e}")
     finally:
         driver.quit()
-
-
